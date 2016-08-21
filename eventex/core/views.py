@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-from eventex.core.models import Speaker
+from eventex.core.models import Speaker, Talk
 
 
 def home(request):
@@ -14,5 +14,8 @@ def speaker_detail(request, slug):
 
 
 def talk_list(request):
-    from django.http import HttpResponse
-    return HttpResponse()
+    context = {
+        'morning_talks': Talk.objects.filter(start__lt='12:00'),
+        'afternoon_talks': Talk.objects.filter(start__gte='12:00')
+    }
+    return render(request, 'core/talk_list.html', context)
